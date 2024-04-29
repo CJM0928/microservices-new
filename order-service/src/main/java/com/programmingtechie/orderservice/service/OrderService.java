@@ -8,6 +8,7 @@ import com.programmingtechie.orderservice.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final WebClient webClient;
 
     public void placeOrder(OrderRequest orderRequest){
         Order order = new Order();
@@ -31,6 +33,15 @@ public class OrderService {
         order.setOrderLineItemsList(orderLineItems);
 
         // Call Inventory Service, and Place order if product is in stock
+        // 클라이언트에서 데이터를 읽기위해서는 아래의 본문이 필요함. ( Mono )
+        // 동기식 요청이 가능하면 8082에 대한 동기식 요청을 해야함.
+        // result 가 true라면, 재고가 있다는 의미로 주문해야함.
+        
+        Boolean result = webClient.get()
+                    .uri("http://localhost:8082/api/inventory")
+                    .retrieve()
+                    .bodyToMono(Boolean.class)
+                    .block();
         orderRepository.save(order);
     }
 
