@@ -22,6 +22,8 @@ public class InventoryService {
     public List<InventoryResponse> isInStock(List<String> skuCode){
         // isPresent(); 을 쓸수없다. Optional 타입의 메서드 이기때문
         // return inventoryRepository.findBySkuCodeIn(skuCode).isPresent();
+        // 여기서 skuCode를 give 하는대신, find 할 것이다.
+        // Inventory의 ResponseList를 return 해줄것이다.
         return inventoryRepository.findBySkuCodeIn(skuCode).stream()
                 .map(inventory ->
                         InventoryResponse.builder()
