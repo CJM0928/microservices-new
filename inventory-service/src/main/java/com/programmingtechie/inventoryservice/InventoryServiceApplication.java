@@ -5,9 +5,13 @@ import com.programmingtechie.inventoryservice.repository.InventoryRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
+@EnableDiscoveryClient
+// @EnableEurekaClient는 Eureka에서 더이상 사용하지않으므로, Server의 클라이언트를 애너테이션한다.
+// Eureka Client의 권한과 관련하여 application.properties에 일부 구성을 추가해야함.
 public class InventoryServiceApplication {
 
 	public static void main(String[] args) {
